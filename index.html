@@ -1,0 +1,229 @@
+  <!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Flex & Bison - Agilizando a ardua Tarefa de se Construir Compiladores</title>
+
+		<meta name="description" content="Desenvolvimento de Compiladores com Flex & Bison">
+		<meta name="author" content="Rodrigo A Valente">
+
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/blood.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Flex & Bison</h1>
+					<h3>Construindo Compiladores</h3>
+					<p>
+						<small>Criado por Rodrigo A Valente</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Introdução</h2>
+					<p>
+						O desenvolvimento de compiladores nunca foi uma tarefa fácil. Entranto, quando se
+						fala em computação e surge uma tarefa difícil, sempre surgem pessoas que tentam facilitar esse processo. E é por isso que ferramentas como Flex e Bison foram criadas.
+					</p>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<section>
+						<h2>O Flex</h2>
+						<p>
+							Foi desenvolvido por Vern Paxson por volta do ano de 1987. O programa foi todo
+							desenvolvido em linguagem C e é uma versão aprimorada do Lex, trazendo com sigo
+							um algoritmo de processamento muito mais veloz que o seu antecessor.
+						</p>
+					</section>
+					<section>
+						<h2>Funcionamento</h2>
+						<p>
+							O Flex é um programa gerador de analisadores léxicos. Nele são definidos as regras
+							para o reconhecimento de tokens de sua linguagem.
+						</p>
+						<p>
+							Essas regras são definidas através de expressões regulares, tendo uma para cada token. O Flex gera um programa em C chamado "lex.yy.c" o qual é o analisar léxico
+							referente as regras descritas.
+						</p>
+					</section>
+					<section>
+						<h2>Exemplo</h2>
+						<p>
+							Definição de Regras no Flex
+						</p>
+						<pre>
+							<code class="hljs">
+	%%
+	"if"			    {return IF;}
+	"while"			    {return WHILE;}
+	[0-9]*\.?[0-9]+  	    {return NUMBER;}
+	%%
+							</code>
+						</pre>					
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Bison</h2>
+						<p>
+							GNU bison ou comumente conhecido como Bison é uma ferramenta capaz de gerar um
+							analisador sintático em linguagens C, C++ e Java. Foi desenvolvido por Robert Corbett por volta do ano de 1988, e mais tarde foi aprimorada pra se tornar compatível com o yacc (outra ferramenta para se gerar analisadores sintáticos) por Richard Stallman.
+						</p>	
+					</section>
+
+					<section>
+						<h2>Funcionamento</h2>
+						<p>
+							O Bison processa uma gramática escrita na notação de Backus Naur. Comumente
+							se faz a definição dos tokens no analisador léxico, entretanto, aqui essa tarefa
+							é invertida; os tokens devem ser definidos no Bison.
+						</p>
+						<p>
+							Para isso a ferramenta exporta os códigos fontes do programa para que ele possa ser utilizado em outros programas. 
+						</p>
+					</section>
+
+					<section>
+						<h2>Exemplo</h2>
+						<p>Definição de uma Gramática em BNF</p>
+						<pre>
+							<code class="hljs">
+%%
+	calculadora:
+			%empty
+		|	calculadora expressao EOL
+		;
+
+	expressao:
+			NUMERO ADD NUMERO			{$$ = $1 + $3;}
+		|	NUMERO SUB NUMERO			{$$ = $1 + $3;}
+		;
+%%							
+							</code>
+						</pre>
+					</section>
+					
+				</section>
+
+				<section>
+					<section>
+						<h2>Por que utilizar Flex e Bison juntos?</h2>
+						<p>
+							As duas ferramentas geram programas distintos, entretanto, que podem ser facilmente
+							interligados, já ambos são compatíveis com o yacc, permitindo-os que se completem, agilizando fortemente o processo de criação de compiladores.
+						</p>
+					</section>
+					<section>
+						<h2>Mas nem tudo são flores.</h2>
+						<p>
+							Essa facilidade vem em custa de certa perda de desempenho no compilador gerado, já que um solução específica para um problema específico é muito mais eficaz que utlizar ferramentas genéricas.
+						</p>
+						<p>
+							Por isso, muitas das vezes, Flex e Bison são escolhidos para se gerar o protótipo de uma linguagem.
+						</p>
+					</section>
+				</section>
+
+				<section id="fragments">
+					<h2>Estrutura</h2>
+					<p>
+						As duas ferramentas tem um funcionamento muito parecido, separando a estrutura do programa em 3 partes:
+					</p>
+					<ul>
+						<li class="fragment">Configurações</li>
+						<li class="fragment">Definição de Regras</li>
+						<li class="fragment">Código (Opcional)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Uso</h2>
+					<p>
+						Os geradores são ferramentas de linha de comando e totalmente gratuitos, praticamente toda distribuição Linux já as possui instalados.
+					</p>
+					<p>
+						Para usa-los basta chamar o programa e mostrar o caminho do arquivo.
+					</p>
+					<pre>
+						<code class="hljs">
+	bison meuparser.y
+	flex meulexer.l
+						</code>
+					</pre>
+				</section>
+
+				<section>
+					<h2>Fonte</h2>
+					<ul>
+						<li>
+							<a href="https://www.gnu.org/software/bison/">Site Oficial Bison</a>
+						</li>
+						<li>
+							<a href="flex.sourceforge.net">Site Oficial Flex</a>
+						</li>
+						<li>
+							<a href="http://shop.oreilly.com/product/9780596155988.do">Flex & Bison</a>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>FIM</h2>
+				</section>				
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
