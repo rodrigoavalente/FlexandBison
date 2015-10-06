@@ -112,15 +112,15 @@
 						<pre>
 							<code class="hljs">
 %%
-	calculadora:
-			%empty
-		|	calculadora expressao EOL
-		;
+calculadora:
+		%empty
+	|	calculadora expressao EOL
+	;
 
-	expressao:
-			NUMERO ADD NUMERO		{$$ = $1 + $3;}
-		|	NUMERO SUB NUMERO		{$$ = $1 + $3;}
-		;
+expressao:
+		NUMERO ADD NUMERO		{$$ = $1 + $3;}
+	|	NUMERO SUB NUMERO		{$$ = $1 + $3;}
+	;
 %%							
 							</code>
 						</pre>
